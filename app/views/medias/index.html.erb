@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+ <head>
+    <title>Unplugged</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+</head>
+<body>
+    <h2>Hello <%= @username %></h2>
+
+    <div class = "index-page">
+        <div class = "medias-box">
+            <h3>Your Social Media</h3>
+            <div class = "medias">
+                <% @medias.each do |media| %>
+                        <%= media.name %>
+                        <%= media.date_unplugged %>
+                        <%= form_tag({:controller => 'medias', :action => "update_plugged", :id => "#{media.id}"}, :method => :post, id: "update-plugged#{media.id}", :name => "plugged-form") do%>
+                            <label class="switch">
+                                <%= check_box_tag '','', media.plugged, class:"media-slider"%>
+                                <span class = "slider round"></span>
+                            </label>
+                            <%= link_to "Remove", medium_path(media.id), :method => :delete %>
+                        <%end%>
+                <% end %>
+            </div>
+            <div class = "add-media">
+                <button id = "add-media-btn">Add Media</button>
+            </div>
+        </div>
+
+        <br>
+        <br>
+
+ 
+        <div class = "add-form" id="add-media-form">
+            <%= form_for Media.create, :url => { :controller => "medias", :action => "create" }, :html => {:method =>:post} do |f| %>
+                <div class="form-group">
+                    <%= f.label :name %>
+                    <%= f.text_field :name, class:"form-field" %>
+                </div>
+                <label class="switch">
+                    <%= f.check_box :plugged %>
+                    <span class = "slider round"></span>
+                </label>
+                <div class="form-group">
+                    <%= f.submit "Save", class: "btn", id: "save-media"%>
+                </div>
+                <div>
+                    <input type="button", value = "Close", id= "close-media">
+                </div>
+            <% end %>
+        </div>
+
+        <%= line_chart @medias.group_by_day(:updated_at).count %>
+    </div>
+</body>
+</html>

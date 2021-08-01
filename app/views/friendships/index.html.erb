@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+ <head>
+    <title>Unplugged</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+</head>
+<body>
+
+    <% @friends.each do |friend| %>
+        <%= link_to "#{friend.username}", '#', :class => "friend-username"%>
+        <div class = "friend-medias">
+            <% friend.medias.each do |media| %>
+                <%= media.name %>
+                <% if media.plugged? %>
+                    <%= "On" %>
+                <% else %>
+                    <%= "Off" %>
+                <% end %>
+            <%end%> 
+        </div>
+    <%end%>
+</body>
